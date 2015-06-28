@@ -29,25 +29,33 @@ All messages have a `msg` field specifying the message type as a string.
     - `session` string (optional): the session to continue
 - `connected` server -> client: connection initiated
     - `session` string: the id of the session that is currently being used
-- `failed` server -> client: connection failed. Either the version is unsuported, or the requested
+- `failed` server -> client: connection failed. Either the version is unsupported, or the requested
     session no longer exists.
     - `version` number: the version that the server speaks
+- `badLlama` server -> client: the client has misbehaved and is being kicked
+    - `reason` string
+    - `insult` string
 
 ### Game Configuration
 
 - `poi`: information about a POI
     - `guid` string: the POI identifier
-    - `included` boolean: if the POI is part of the game
-    - `role` string: the role of the POI in the game
+    - `data` object: the info, including at least:
+        - `included` boolean: if the POI is part of the game
+        - `tag` string: a tag for the POI in the game
     
-### Events
+### Game Data
 
-- `start` server -> client: start sending event data
+- `worldState` server -> client: send events that describe constructing the current world state
+    from the blank state
+    
+- `start` server -> client: start sending events as they happen 
 
-- `stop` server -> client: stop sending event data
+- `stop` server -> client: stop sending event as they happen
 
 - `event` client -> server: an event occurred
     - `type` string: the event type
+    - `timestamp` number: when the event occurred
     - `team` string: which team caused the event
     - `player` string (optional): the player who caused the event
     - various other fields as needed
@@ -60,10 +68,10 @@ Events of the following type can be reported:
     - `poi`
 - `attack`
     - `poi`
-- `link-created`
-    - `poi-from`
-    - `poi-to`
-- `link-destroyed`
-    - `poi-from`
-    - `poi-to`
+- `linkCreated`
+    - `poiFrom`
+    - `poiTo`
+- `linkDestroyed`
+    - `poiFrom`
+    - `poiTo`
 
