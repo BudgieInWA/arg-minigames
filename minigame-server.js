@@ -1,12 +1,16 @@
 var _ = require('lodash');
+var fs = require('fs');
 var shortid = require('shortid');
-var insults = require('./insults');
+var https = require('https');
 var WebSocketServer = require('ws').Server;
+
+var insults = require('./insults');
 
 console.debug = _.noop;
 
 var PORT = 6543;
 var VERSION = 1;
+
 
 var pois = {};
 
@@ -124,7 +128,8 @@ Client.prototype.handle = function(msg) {
   if (this.connected) {
     switch(msg.msg) {
       case 'poi':
-        if ((typeof msg.data) !== 'object') return this.badLlama("expecting `data` to be an object");
+        if ((typeof msg.guid) !== 'string' || (typeof msg.data) !== 'object')
+          return this.badLlama("expecting `guid` to be string and `data` to be an object");
         handlePoiData(msg.guid, msg.data);
       break;
 
@@ -163,18 +168,27 @@ Client.prototype.handle = function(msg) {
 Client.prototype.sendState = function() {
   var self = this;
 
-  _.each(pois, function(guid, poi) {
-    self.send({msg:'poi', giud: guid, data: poi});
+  _.each(pois, function(poi, guid) {
+    self.send({msg:'poi', guid: guid, data: poi});
   });
   //TODO send them `start` if we currently want events
 };
 
-var wss = new WebSocketServer({port: PORT});
+var server = https.createServer({
+  key:  fs.readFileSync('key.pem').toString(),
+  cert: fs.readFileSync('cert.pem').toString(),
+});
+var wss = new WebSocketServer({ server: server });
+server.listen(PORT);
 
 wss.on('connection', function(ws) {
   console.debug("New Connection:", ws);
 
   new Client(shortid.generate(), ws);
+});
+
+wss.on('error', function(e){
+  console.error(e);
 });
 
 console.log("Listening...")

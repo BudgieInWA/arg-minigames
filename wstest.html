@@ -1,0 +1,13 @@
+<html>
+<head>
+    <script>
+        var ws = new WebSocket("wss://localhost:6543");
+        ws.onmessage = function(msg) {
+            console.info(msg);
+        };
+        ws.onconnect = function() {
+            ws.send(JSON.stringify({msg:'connect', version:1}));
+        };
+    </script>
+</head>
+</html>
