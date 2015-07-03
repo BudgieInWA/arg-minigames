@@ -128,13 +128,18 @@ Client.prototype.handle = function(msg) {
   if (this.connected) {
     switch(msg.msg) {
       case 'poi':
-        if ((typeof msg.guid) !== 'string' || (typeof msg.data) !== 'object')
-          return this.badLlama("expecting `guid` to be string and `data` to be an object");
+        if ((typeof msg.guid) !== 'string' ||
+            (typeof msg.data) !== 'object' ||
+            (typeof msg.data.latE6) !== 'number' ||
+            (typeof msg.data.lngE6) !== 'number')
+          return this.badLlama("expecting `guid` to be string and `data` to be a correct object");
         handlePoiData(msg.guid, msg.data);
       break;
 
       case 'event':
-        if ((typeof msg.type) !== 'string' || (typeof msg.timestamp) !== 'number' || (typeof msg.team) !== 'string')
+        if ((typeof msg.type) !== 'string' ||
+            (typeof msg.timestamp) !== 'number' ||
+            (typeof msg.team) !== 'string')
           return this.badLlama("`event` requires `type`, `timestamp`, and `team`");
         handleEvent(msg);
       break;

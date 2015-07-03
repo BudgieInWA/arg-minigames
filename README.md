@@ -41,6 +41,8 @@ All messages have a `msg` field specifying the message type as a string.
 - `poi`: information about a POI
     - `guid` string: the POI identifier
     - `data` object: the info, including at least:
+        - `latE6` number: latitude * 10^6
+        - `lngE6` number: longitude * 10^6
         - `included` boolean: if the POI is part of the game
         - `tag` string: a tag for the POI in the game
     
@@ -64,14 +66,20 @@ Events of the following type can be reported:
 
 - `capture`
     - `poi`
+- `neutralise`
+    - `poi`
+- `build`
+    - `poi`
 - `destroy`
     - `poi`
-- `attack`
-    - `poi`
-- `linkCreated`
+- `createLink`
     - `poiFrom`
     - `poiTo`
-- `linkDestroyed`
+- `destroyLink`
     - `poiFrom`
     - `poiTo`
+- `createLink`
+    - `poiFrom`
+    - `points`
 
+For each of these, poi is an object with either `guid` (string) or `latE6` and `lngE6` (numbers).
