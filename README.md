@@ -53,7 +53,7 @@ All messages have a `msg` field specifying the message type as a string.
     
 - `start` server -> client: start sending events as they happen 
 
-- `stop` server -> client: stop sending event as they happen
+- `end` server -> client: stop sending event as they happen
 
 - `event` client -> server: an event occurred
     - `type` string: the event type
