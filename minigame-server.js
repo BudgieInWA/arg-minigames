@@ -107,7 +107,11 @@ Client.broadcast = function(msg) {
 Client.prototype.close = function() {
   this.log("Going Away!");
 
-  this.ws.close();
+  try {
+    this.ws.close();
+  } catch(e) {
+    console.log("Failed to close ws:", e, ws);
+  }
   delete clients[this.id];
 };
 
@@ -119,7 +123,12 @@ Client.prototype.close = function() {
 Client.prototype.send = function(msg) {
   if (this.connected) {
     this.info("Sending:", msg);
-    this.ws.send(JSON.stringify(msg));
+    try {
+      this.ws.send(JSON.stringify(msg));
+    } catch(e) {
+      console.log('Failed to send message over ws:', e, this.ws);
+      this.close();
+    }
   } else {
     //TODO buffer message
     // In the meantime, drop the message on the floor.
