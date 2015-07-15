@@ -25,8 +25,8 @@ var measurementActive = false;
 
 // parse arguments
 if (process.argv.length < 3) {
-  "need gamefile as first argument";
-  system.exit(1)
+  console.error("need gamefile as first argument");
+  process.exit(1)
 }
 var gameFileName = process.argv[2];
 
