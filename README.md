@@ -15,6 +15,28 @@ are sent to the clients in order to determine which information should be sent.
 
 Game parameters are saved and loaded from a JSON file.
 
+
+Running
+-------
+
+### Prerequisites
+
+- `nodejs`
+- `openssl`
+
+### Setup
+
+- Create an SSL Certificate by running `generate-server-cert.sh`. Make sure to enter you domain
+    name when asked for a "Common Name". This may well be 'localhost'.
+- Run the server as below and navigate to it using https (e.g. https://example.com:6543)
+    in order to make your browser trust the server.
+
+### Running
+
+- Run `node minigame-server.js example.json` to create a new game config saved to `example.json`.
+- Connect your minigame helper clients to the server.
+
+
 Protocol v1
 --------
 

@@ -212,9 +212,13 @@ Client.prototype.sendState = function() {
 // Set up the server.
 
 var server = https.createServer({
-  key:  fs.readFileSync('key.pem').toString(),
-  cert: fs.readFileSync('cert.pem').toString(),
+  key:  fs.readFileSync('server.key.pem').toString(),
+  cert: fs.readFileSync('server.cert.pem').toString(),
+}, function (req, res) {
+  res.writeHead(200);
+  res.end("You have successfully made your browser trust this server!\n\n");
 });
+
 var wss = new WebSocketServer({ server: server });
 
 wss.on('connection', function(ws) {
